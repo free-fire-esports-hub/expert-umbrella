@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090817">
+  <meta name="description" content="Free Fire Esports Hub — Powered by DARK XCOP">
+  <title>Free Fire Esports Hub | Powered by DARK XCOP</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home"><img src="assets/logo.png" alt="Esports Hub — Powered by DARK XCOP"><span>FREE FIRE ESPORTS HUB<small>POWERED BY DARK XCOP</small></span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+    <nav id="mainNav">
+      <a href="#home">Home</a><a href="#players">Players</a><a href="#teams">Teams</a>
+      <a href="#tournaments">Tournaments</a><a href="#ranking">Ranking</a>
+      <a href="#requests">Requests</a><a href="#chat">Chat</a>
+    </nav>
+    <div class="account-area" id="accountArea"><button class="btn primary" id="openAuth">Login / Register</button></div>
+  </header>
+
+  <main>
+    <section id="home" class="hero section">
+      <div class="hero-copy">
+        <span class="eyebrow">BANGLADESH FREE FIRE COMMUNITY</span>
+        <h1>FIND YOUR TEAM.<br><em>BUILD YOUR LEGACY.</em></h1>
+        <p>Discover players, create teams, join tournaments and grow together.</p>
+        <div class="hero-actions"><a class="btn primary" href="#players">Explore Players</a><a class="btn outline" href="#teams">Explore Teams</a></div>
+      </div>
+      <div class="hero-mark"><img src="assets/logo.png" alt="Free Fire Esports Hub Powered by DARK XCOP"></div>
+    </section>
+
+    <section id="auth" class="section panel auth-panel hidden">
+      <div class="section-heading"><div><span class="eyebrow">YOUR ESPORTS JOURNEY</span><h2 id="authTitle">Create your account</h2></div><button class="icon-btn" id="closeAuth" aria-label="Close">✕</button></div>
+      <form id="authForm" class="form-grid">
+        <label id="nameWrap">Display name<input id="authName" maxlength="32" placeholder="Your gaming name"></label>
+        <label>Email<input id="authEmail" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <label>Password<input id="authPassword" type="password" required minlength="6" autocomplete="current-password" placeholder="At least 6 characters"></label>
+        <label>Account type<select id="authRole"><option value="player">Player</option><option value="team">Team / Manager</option></select></label>
+        <div class="form-actions"><button class="btn primary" id="authSubmit" type="submit">Create account</button><button class="btn outline" type="button" id="forgotPassword">Forgot password?</button></div>
+      </form>
+      <p class="muted small" id="authSwitchText">Already registered? <button class="text-btn" id="authSwitch">Login</button></p>
+      <p class="notice">Email verification is required. After registering, check your inbox and verify your email before using account features.</p>
+    </section>
+
+    <section id="dashboard" class="section panel hidden">
+      <div class="section-heading"><div><span class="eyebrow">YOUR CONTROL CENTER</span><h2>My Dashboard</h2></div><button class="btn outline" id="logoutBtn">Logout</button></div>
+      <div id="dashboardContent"></div>
+    </section>
+
+    <section id="players" class="section">
+      <div class="section-heading"><div><span class="eyebrow">FIND YOUR NEXT TEAMMATE</span><h2>Players</h2><p class="muted">Browse player profiles and send recruitment requests.</p></div></div>
+      <div class="toolbar"><input id="playerSearch" placeholder="Search player name, UID or role"><select id="roleFilter"><option value="">All roles</option><option>Rusher</option><option>Sniper</option><option>Support</option><option>IGL</option><option>Flex</option></select><select id="availabilityFilter"><option value="">Any availability</option><option value="true">Available</option><option value="false">Not available</option></select></div>
+      <div id="playersGrid" class="cards-grid"><div class="empty">Sign in and create a player profile to get started.</div></div>
+    </section>
+
+    <section id="teams" class="section">
+      <div class="section-heading"><div><span class="eyebrow">BUILD YOUR SQUAD</span><h2>Teams</h2><p class="muted">Find teams recruiting new members.</p></div></div>
+      <div class="toolbar"><input id="teamSearch" placeholder="Search team name or game style"></div>
+      <div id="teamsGrid" class="cards-grid"><div class="empty">No teams published yet.</div></div>
+    </section>
+
+    <section id="tournaments" class="section">
+      <div class="section-heading"><div><span class="eyebrow">COMPETE AND RISE</span><h2>Tournaments</h2></div></div>
+      <div id="tournamentsGrid" class="cards-grid"><div class="empty">Tournament announcements will appear here.</div></div>
+    </section>
+
+    <section id="ranking" class="section">
+      <div class="section-heading"><div><span class="eyebrow">THE LEADERBOARD</span><h2>Top Players</h2></div></div>
+      <div id="rankingList" class="panel empty">Player rankings will appear here after profiles are created.</div>
+    </section>
+
+    <section id="requests" class="section">
+      <div class="section-heading"><div><span class="eyebrow">TEAM CONNECTIONS</span><h2>Recruitment Requests</h2></div></div>
+      <div id="requestsList" class="panel empty">Log in to view your requests.</div>
+    </section>
+
+    <section id="chat" class="section">
+      <div class="section-heading"><div><span class="eyebrow">SQUAD COMMUNICATION</span><h2>Chat</h2></div></div>
+      <div class="panel chat-panel">
+        <div id="chatNotice" class="muted">Log in and open a player or team profile to start a conversation.</div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <form id="chatForm" class="chat-form"><input id="chatInput" placeholder="Write a message..." maxlength="1000" disabled><button class="btn primary" disabled>Send</button></form>
+      </div>
+    </section>
+
+    <section id="admin" class="section hidden">
+      <div class="section-heading"><div><span class="eyebrow">SITE MANAGEMENT</span><h2>Admin Panel</h2></div></div>
+      <div class="panel"><p>Admin access is granted only to accounts explicitly assigned the admin role in Firestore. Never make yourself admin from the public website.</p><div id="adminContent"></div></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <img src="assets/logo.png" alt="Esports Hub Powered by DARK XCOP">
+    <p><strong>FREE FIRE ESPORTS HUB</strong><br><span>POWERED BY DARK XCOP</span></p>
+    <small>Community platform. Not affiliated with Garena or Free Fire.</small>
+  </footer>
+
+  <dialog id="profileDialog" class="modal"><button class="icon-btn modal-close" id="closeProfile">✕</button><div id="profileDetails"></div></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

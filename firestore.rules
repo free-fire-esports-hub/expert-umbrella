@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function isAdmin() {
+      return signedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    match /users/{uid} {
+      allow read: if true;
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.role in ["player", "team"]
+        && request.resource.data.blocked == false;
+      allow update: if verified() && request.auth.uid == uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.verified == resource.data.verified
+        && request.resource.data.blocked == resource.data.blocked;
+      allow update, delete: if isAdmin();
+    }
+
+    match /requests/{id} {
+      allow create: if verified()
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.toUid != request.auth.uid
+        && request.resource.data.status == "pending";
+      allow read: if verified() &&
+        (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid || isAdmin());
+      allow update: if verified() && resource.data.toUid == request.auth.uid
+        && request.resource.data.fromUid == resource.data.fromUid
+        && request.resource.data.toUid == resource.data.toUid
+        && request.resource.data.status in ["accepted", "declined"];
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{id} {
+      allow create: if verified() && request.resource.data.fromUid == request.auth.uid;
+      allow read, update, delete: if verified() && resource.data.toUid == request.auth.uid;
+    }
+
+    match /chats/{chatId}/messages/{messageId} {
+      allow read: if verified() && request.auth.uid in chatId.split("_");
+      allow create: if verified() && request.auth.uid in chatId.split("_")
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 1000;
+    }
+
+    match /reports/{id} {
+      allow create: if verified() && request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /blocks/{id} {
+      allow create: if verified() && request.resource.data.blockerUid == request.auth.uid;
+      allow read, delete: if verified() && resource.data.blockerUid == request.auth.uid;
+    }
+
+    match /tournaments/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}
